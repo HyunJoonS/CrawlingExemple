@@ -10,7 +10,24 @@ import org.springframework.boot.test.context.SpringBootTest
 class KotlinCrawlingApplicationTests {
 
 	@Test
-	fun contextLoads() {
+	fun detailSearch() {
+		var biznum = "2768801550"
+		var url = Jsoup.connect("https://moneypin.biz/bizno/detail/$biznum").get()
+
+		val data = url.select("#ceo")
+		if(data.isEmpty()){
+			println("조회 실패")
+		}
+		else{
+			println("data = $data")
+			val split = url.title().split("-")
+			println("title = ${split[1].trim()}")
+			println("element = ${data[0].text()}")
+		}
+	}
+
+	@Test
+	fun jsonSearch() {
 		var biznum = "1046100318"
 		var url = Jsoup.connect("https://moneypin.biz/bizno/?name=$biznum").get()
 
@@ -38,6 +55,7 @@ class KotlinCrawlingApplicationTests {
 
 		defaultDataList.forEach { println(it) }
 	}
+
 	@Test
 	fun main() {
 		val jsonString = """[
@@ -66,6 +84,7 @@ class KotlinCrawlingApplicationTests {
 
 		defaultDataList.forEach { println(it) }
 	}
+
 	data class DefaultData(
 		val companyName: String,
 		val bizNo: String,
